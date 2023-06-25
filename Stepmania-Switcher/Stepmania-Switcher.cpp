@@ -18,7 +18,9 @@ WCHAR szTitle[MAX_LOADSTRING];                  // The title bar text
 WCHAR szWindowClass[MAX_LOADSTRING];            // the main window class name
 
 
-HWND pizza;
+HWND stepMania5Button;
+HWND ddrExtremeButton;
+HWND shutdownButton;
 
 
 // Forward declarations of functions included in this code module:
@@ -140,17 +142,53 @@ LRESULT CALLBACK WndProc(HWND hWnd, UINT message, WPARAM wParam, LPARAM lParam)
 
     case WM_CREATE:
     {
-        pizza = CreateWindowExA(
+        stepMania5Button = CreateWindowExA(
             HTMAXBUTTON,
             "BUTTON",  // Predefined class; Unicode assumed
-            "OK pizza",      // Button text
+            "StepMania 5",      // Button text
             WS_TABSTOP | WS_VISIBLE | WS_CHILD | BS_DEFPUSHBUTTON,  // Styles
-            20,         // x position
-            20,         // y position
-            100,        // Button width
-            100,        // Button height
+            270,         // x position
+            230,         // y position
+            340,        // Button width
+            340,        // Button height
             hWnd,     // Parent window
             (HMENU) 1,
+            NULL,
+            NULL);      // Pointer not needed.
+
+
+
+
+
+        ddrExtremeButton = CreateWindowExA(
+            HTMAXBUTTON,
+            "BUTTON",  // Predefined class; Unicode assumed
+            "DDR Extreme",      // Button text
+            WS_TABSTOP | WS_VISIBLE | WS_CHILD | BS_DEFPUSHBUTTON,  // Styles
+            890,         // x position
+            230,         // y position
+            340,        // Button width
+            340,        // Button height
+            hWnd,     // Parent window
+            (HMENU)2,
+            NULL,
+            NULL);      // Pointer not needed.
+
+
+
+
+
+        shutdownButton = CreateWindowExA(
+            HTMAXBUTTON,
+            "BUTTON",  // Predefined class; Unicode assumed
+            "Shut down",      // Button text
+            WS_TABSTOP | WS_VISIBLE | WS_CHILD | BS_DEFPUSHBUTTON,  // Styles
+            1330,         // x position
+            700,         // y position
+            150,        // Button width
+            120,        // Button height
+            hWnd,     // Parent window
+            (HMENU)3,
             NULL,
             NULL);      // Pointer not needed.
 
@@ -264,7 +302,7 @@ LRESULT CALLBACK WndProc(HWND hWnd, UINT message, WPARAM wParam, LPARAM lParam)
 
             HDC hdc = GetDC(hWnd);
 
-            RECT rect = { 15, 15, 125, 125 };
+            RECT rect = { 15, 55, 125, 125 };
             HBRUSH brush = CreateSolidBrush(RGB(0, 255, 255));
 
             FillRect(hdc, &rect, brush);
@@ -273,7 +311,7 @@ LRESULT CALLBACK WndProc(HWND hWnd, UINT message, WPARAM wParam, LPARAM lParam)
 
             // ShowWindow(pizza, SW_RESTORE);
 
-            RedrawWindow(pizza, NULL, NULL, RDW_INVALIDATE | RDW_UPDATENOW);
+            RedrawWindow(stepMania5Button, NULL, NULL, RDW_INVALIDATE | RDW_UPDATENOW);
 
 
 
