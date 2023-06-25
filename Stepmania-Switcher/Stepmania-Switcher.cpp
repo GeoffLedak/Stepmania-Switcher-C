@@ -17,6 +17,10 @@ HINSTANCE hInst;                                // current instance
 WCHAR szTitle[MAX_LOADSTRING];                  // The title bar text
 WCHAR szWindowClass[MAX_LOADSTRING];            // the main window class name
 
+
+HWND pizza;
+
+
 // Forward declarations of functions included in this code module:
 ATOM                MyRegisterClass(HINSTANCE hInstance);
 BOOL                InitInstance(HINSTANCE, int);
@@ -136,13 +140,13 @@ LRESULT CALLBACK WndProc(HWND hWnd, UINT message, WPARAM wParam, LPARAM lParam)
 
     case WM_CREATE:
     {
-        CreateWindowExA(
+        pizza = CreateWindowExA(
             HTMAXBUTTON,
             "BUTTON",  // Predefined class; Unicode assumed
             "OK pizza",      // Button text
             WS_TABSTOP | WS_VISIBLE | WS_CHILD | BS_DEFPUSHBUTTON,  // Styles
-            10,         // x position
-            10,         // y position
+            20,         // x position
+            20,         // y position
             100,        // Button width
             100,        // Button height
             hWnd,     // Parent window
@@ -248,8 +252,28 @@ LRESULT CALLBACK WndProc(HWND hWnd, UINT message, WPARAM wParam, LPARAM lParam)
 
         if ((UINT)wParam & JOY_BUTTON1)
         {
-            Beep(200, 500);
+            // Beep(200, 500);
 
+
+            // ShowWindow(pizza, SW_HIDE);
+
+
+
+
+            // HDC hdc = CreateDC(TEXT("DISPLAY"), NULL, NULL, NULL);
+
+            HDC hdc = GetDC(hWnd);
+
+            RECT rect = { 15, 15, 125, 125 };
+            HBRUSH brush = CreateSolidBrush(RGB(0, 255, 255));
+
+            FillRect(hdc, &rect, brush);
+
+            DeleteObject(brush);
+
+            // ShowWindow(pizza, SW_RESTORE);
+
+            RedrawWindow(pizza, NULL, NULL, RDW_INVALIDATE | RDW_UPDATENOW);
 
 
 
