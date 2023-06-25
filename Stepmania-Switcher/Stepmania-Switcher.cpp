@@ -390,28 +390,34 @@ INT_PTR CALLBACK About(HWND hDlg, UINT message, WPARAM wParam, LPARAM lParam)
 
 void clearSelected(HWND hWnd) {
 
-
-
-
     PAINTSTRUCT ps;
     HDC hdc = BeginPaint(hWnd, &ps);
-    // TODO: Add any drawing code that uses hdc here...
 
 
-
-
-        // 270,         // x position
-        // 230,         // y position
-        // 340,        // Button width
-        // 340,        // Button height
-
+    HBRUSH brush = CreateSolidBrush(RGB(0, 0, 255));
 
 
 
     RECT rect = { 260, 220, 620, 580 };
-    HBRUSH brush = CreateSolidBrush(RGB(0, 0, 255));
-
     FillRect(hdc, &rect, brush);
+
+
+
+    rect = { 880, 220, 1240, 580 };
+    FillRect(hdc, &rect, brush);
+
+
+
+
+        // 1330,         // x position
+        // 700,         // y position
+        // 150,        // Button width
+        // 120,        // Button height
+
+
+    rect = { 1320, 690, 1490, 830 };
+    FillRect(hdc, &rect, brush);
+
 
 
 
