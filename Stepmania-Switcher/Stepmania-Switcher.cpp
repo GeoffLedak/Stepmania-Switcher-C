@@ -22,12 +22,16 @@ HWND stepMania5Button;
 HWND ddrExtremeButton;
 HWND shutdownButton;
 
+bool isInit = true;
+
 
 // Forward declarations of functions included in this code module:
 ATOM                MyRegisterClass(HINSTANCE hInstance);
 BOOL                InitInstance(HINSTANCE, int);
 LRESULT CALLBACK    WndProc(HWND, UINT, WPARAM, LPARAM);
 INT_PTR CALLBACK    About(HWND, UINT, WPARAM, LPARAM);
+
+void clearSelected(HWND);
 
 int APIENTRY wWinMain(_In_ HINSTANCE hInstance,
                      _In_opt_ HINSTANCE hPrevInstance,
@@ -340,10 +344,17 @@ LRESULT CALLBACK WndProc(HWND hWnd, UINT message, WPARAM wParam, LPARAM lParam)
 
     case WM_PAINT:
         {
-            PAINTSTRUCT ps;
-            HDC hdc = BeginPaint(hWnd, &ps);
-            // TODO: Add any drawing code that uses hdc here...
-            EndPaint(hWnd, &ps);
+
+
+        
+        if (isInit) {
+            isInit = false;
+            clearSelected(hWnd);
+        }
+
+
+
+
         }
         break;
     case WM_DESTROY:
@@ -373,4 +384,57 @@ INT_PTR CALLBACK About(HWND hDlg, UINT message, WPARAM wParam, LPARAM lParam)
         break;
     }
     return (INT_PTR)FALSE;
+}
+
+
+
+void clearSelected(HWND hWnd) {
+
+
+
+
+    PAINTSTRUCT ps;
+    HDC hdc = BeginPaint(hWnd, &ps);
+    // TODO: Add any drawing code that uses hdc here...
+
+
+
+
+        // 270,         // x position
+        // 230,         // y position
+        // 340,        // Button width
+        // 340,        // Button height
+
+
+
+
+    RECT rect = { 260, 220, 620, 580 };
+    HBRUSH brush = CreateSolidBrush(RGB(0, 0, 255));
+
+    FillRect(hdc, &rect, brush);
+
+
+
+
+    EndPaint(hWnd, &ps);
+
+
+
+
+
+/*
+    HDC hdc = GetDC(hWnd);
+
+    RECT rect = { 35, 75, 150, 150 };
+    HBRUSH brush = CreateSolidBrush(RGB(255, 255, 255));
+
+    FillRect(hdc, &rect, brush);
+
+    DeleteObject(brush);
+
+    // ShowWindow(pizza, SW_RESTORE);
+
+    // RedrawWindow(stepMania5Button, NULL, NULL, RDW_INVALIDATE | RDW_UPDATENOW);
+*/
+
 }
