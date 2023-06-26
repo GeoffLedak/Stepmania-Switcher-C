@@ -40,10 +40,12 @@ void selectSelected(HWND);
 
 void selectStepMania5(HWND);
 void selectDDRextreme(HWND);
+void selectShutdown(HWND);
 
 void launchSelected(HWND);
 void launchStepMania5(HWND);
 void launchDDRextreme(HWND);
+void shutdownDaComputah(HWND);
 
 
 int APIENTRY wWinMain(_In_ HINSTANCE hInstance,
@@ -313,8 +315,9 @@ LRESULT CALLBACK WndProc(HWND hWnd, UINT message, WPARAM wParam, LPARAM lParam)
         }
         else if ((UINT)wParam & JOY_BUTTON3)
         {
-
-
+            currentlySelected = shutdownSelected;
+            RedrawWindow(hWnd, NULL, NULL, RDW_INVALIDATE | RDW_UPDATENOW);
+            selectShutdown(hWnd);
         }
         else if ((UINT)wParam & JOY_BUTTON4)
         {
@@ -322,11 +325,7 @@ LRESULT CALLBACK WndProc(HWND hWnd, UINT message, WPARAM wParam, LPARAM lParam)
         }
 
 
-
         break;
-
-
-
 
 
 
@@ -410,6 +409,9 @@ void selectSelected(HWND hWnd) {
     else if (currentlySelected == ddrExtremeSelected) {
         selectDDRextreme(hWnd);
     }
+    else if (currentlySelected == shutdownSelected) {
+        selectShutdown(hWnd);
+    }
 
 
 }
@@ -452,6 +454,27 @@ void selectDDRextreme(HWND hWnd) {
 
 
 
+
+void selectShutdown(HWND hWnd) {
+
+
+    HDC hdc = GetDC(hWnd);
+
+    RECT rect = { 1320, 690, 1490, 830 };
+    HBRUSH brush = CreateSolidBrush(RGB(0, 255, 255));
+
+    FillRect(hdc, &rect, brush);
+
+    DeleteObject(brush);
+
+    RedrawWindow(shutdownButton, NULL, NULL, RDW_INVALIDATE | RDW_UPDATENOW);
+
+
+}
+
+
+
+
 void launchSelected(HWND hWnd) {
 
 
@@ -460,6 +483,9 @@ void launchSelected(HWND hWnd) {
     }
     else if (currentlySelected == ddrExtremeSelected) {
         launchDDRextreme(hWnd);
+    }
+    else if (currentlySelected == shutdownSelected) {
+        shutdownDaComputah(hWnd);
     }
 
 
@@ -555,7 +581,11 @@ void launchDDRextreme(HWND hWnd) {
 
     }
 
+}
 
+
+
+void shutdownDaComputah(HWND hWnd) {
 
 
 
