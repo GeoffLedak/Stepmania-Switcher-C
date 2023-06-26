@@ -161,37 +161,46 @@ LRESULT CALLBACK WndProc(HWND hWnd, UINT message, WPARAM wParam, LPARAM lParam)
 
     case WM_CREATE:
     {
-        stepMania5Button = CreateWindowExA(
-            HTMAXBUTTON,
-            "BUTTON",  // Predefined class; Unicode assumed
-            "StepMania 5",      // Button text
-            WS_TABSTOP | WS_VISIBLE | WS_CHILD | BS_DEFPUSHBUTTON,  // Styles
-            270,         // x position
-            230,         // y position
-            340,        // Button width
-            340,        // Button height
-            hWnd,     // Parent window
-            (HMENU) 1,
+
+        HBITMAP stepmaniaImage = (HBITMAP)LoadImage(NULL, L"stepmania-logo-black-small.bmp", IMAGE_BITMAP, 0, 0, LR_LOADFROMFILE);
+
+        stepMania5Button = CreateWindowEx(
             NULL,
-            NULL);      // Pointer not needed.
+            L"STATIC",
+            NULL,
+            SS_BITMAP | WS_VISIBLE | WS_CHILD,
+            270,    // x position
+            230,    // y position
+            340,    // Button width
+            340,    // Button height
+            hWnd,
+            (HMENU)1,
+            GetModuleHandle(NULL),
+            NULL);
+
+        SendMessage(stepMania5Button, STM_SETIMAGE, IMAGE_BITMAP, (LPARAM)stepmaniaImage);
 
 
 
 
+        HBITMAP ddrExtremeImage = (HBITMAP)LoadImage(NULL, L"ddr-extreme-logo-small.bmp", IMAGE_BITMAP, 0, 0, LR_LOADFROMFILE);
 
-        ddrExtremeButton = CreateWindowExA(
-            HTMAXBUTTON,
-            "BUTTON",  // Predefined class; Unicode assumed
-            "DDR Extreme",      // Button text
-            WS_TABSTOP | WS_VISIBLE | WS_CHILD | BS_DEFPUSHBUTTON,  // Styles
-            890,         // x position
-            230,         // y position
-            340,        // Button width
-            340,        // Button height
-            hWnd,     // Parent window
+        ddrExtremeButton = CreateWindowEx(
+            NULL,
+            L"STATIC",
+            NULL,
+            SS_BITMAP | WS_VISIBLE | WS_CHILD,
+            890,    // x position
+            230,    // y position
+            340,    // Button width
+            340,    // Button height
+            hWnd,
             (HMENU)2,
-            NULL,
-            NULL);      // Pointer not needed.
+            GetModuleHandle(NULL),
+            NULL);
+
+        SendMessage(ddrExtremeButton, STM_SETIMAGE, IMAGE_BITMAP, (LPARAM)ddrExtremeImage);
+
 
 
 
@@ -431,7 +440,6 @@ void selectStepMania5(HWND hWnd) {
     DeleteObject(brush);
 
     RedrawWindow(stepMania5Button, NULL, NULL, RDW_INVALIDATE | RDW_UPDATENOW);
-
 }
 
 
