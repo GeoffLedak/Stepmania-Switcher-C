@@ -129,8 +129,17 @@ BOOL InitInstance(HINSTANCE hInstance, int nCmdShow)
 {
    hInst = hInstance; // Store instance handle in our global variable
 
+   // WS_OVERLAPPEDWINDOW
+
    HWND hWnd = CreateWindowW(szWindowClass, szTitle, WS_OVERLAPPEDWINDOW,
       CW_USEDEFAULT, 0, CW_USEDEFAULT, 0, nullptr, nullptr, hInstance, nullptr);
+
+   // SetWindowLong(hWnd, GWL_STYLE, WS_BORDER);  // With 1 point border
+   SetWindowLong(hWnd, GWL_STYLE, 0);
+
+   // 2560 x 1600
+
+   SetWindowPos(hWnd, 0, 0, 0, GetSystemMetrics(SM_CXSCREEN), GetSystemMetrics(SM_CYSCREEN), 0);
 
    if (!hWnd)
    {
@@ -221,6 +230,12 @@ LRESULT CALLBACK WndProc(HWND hWnd, UINT message, WPARAM wParam, LPARAM lParam)
             NULL);      // Pointer not needed.
 
 
+
+
+
+        SetMenu(hWnd, NULL);
+
+        ShowCursor(false);
 
 
 
@@ -595,6 +610,6 @@ void launchDDRextreme(HWND hWnd) {
 
 void shutdownDaComputah(HWND hWnd) {
 
-
+    DestroyWindow(hWnd);
 
 }
