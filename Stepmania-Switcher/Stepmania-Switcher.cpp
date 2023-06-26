@@ -107,7 +107,7 @@ ATOM MyRegisterClass(HINSTANCE hInstance)
     wcex.hIcon          = LoadIcon(hInstance, MAKEINTRESOURCE(IDI_STEPMANIASWITCHER));
     wcex.hCursor        = LoadCursor(nullptr, IDC_ARROW);
     // wcex.hbrBackground  = (HBRUSH)(COLOR_WINDOW+1);
-    wcex.hbrBackground = CreateSolidBrush(0xFF00FF);
+    wcex.hbrBackground = CreateSolidBrush(0x000000);
     wcex.lpszMenuName   = MAKEINTRESOURCEW(IDC_STEPMANIASWITCHER);
     wcex.lpszClassName  = szWindowClass;
     wcex.hIconSm        = LoadIcon(wcex.hInstance, MAKEINTRESOURCE(IDI_SMALL));
@@ -372,7 +372,7 @@ void clearSelected(HWND hWnd) {
     PAINTSTRUCT ps;
     HDC hdc = BeginPaint(hWnd, &ps);
 
-    HBRUSH brush = CreateSolidBrush(RGB(255, 0, 255));
+    HBRUSH brush = CreateSolidBrush(RGB(0, 0, 0));
 
 
     // StepMania 5
@@ -424,7 +424,7 @@ void selectStepMania5(HWND hWnd) {
     HDC hdc = GetDC(hWnd);
 
     RECT rect = { 260, 220, 620, 580 };
-    HBRUSH brush = CreateSolidBrush(RGB(0, 255, 255));
+    HBRUSH brush = CreateSolidBrush(RGB(0, 255, 0));
 
     FillRect(hdc, &rect, brush);
 
@@ -442,7 +442,7 @@ void selectDDRextreme(HWND hWnd) {
     HDC hdc = GetDC(hWnd);
 
     RECT rect = { 880, 220, 1240, 580 };
-    HBRUSH brush = CreateSolidBrush(RGB(0, 255, 255));
+    HBRUSH brush = CreateSolidBrush(RGB(0, 255, 0));
 
     FillRect(hdc, &rect, brush);
 
@@ -461,7 +461,7 @@ void selectShutdown(HWND hWnd) {
     HDC hdc = GetDC(hWnd);
 
     RECT rect = { 1320, 690, 1490, 830 };
-    HBRUSH brush = CreateSolidBrush(RGB(0, 255, 255));
+    HBRUSH brush = CreateSolidBrush(RGB(0, 255, 0));
 
     FillRect(hdc, &rect, brush);
 
