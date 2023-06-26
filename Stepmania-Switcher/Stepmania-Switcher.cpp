@@ -36,8 +36,12 @@ LRESULT CALLBACK    WndProc(HWND, UINT, WPARAM, LPARAM);
 INT_PTR CALLBACK    About(HWND, UINT, WPARAM, LPARAM);
 
 void clearSelected(HWND);
-void selectStepMania5(HWND);
+void selectSelected(HWND);
 
+void selectStepMania5(HWND);
+void selectDDRextreme(HWND);
+
+void launchSelected(HWND);
 void launchStepMania5(HWND);
 
 
@@ -296,47 +300,33 @@ LRESULT CALLBACK WndProc(HWND hWnd, UINT message, WPARAM wParam, LPARAM lParam)
 
 
     case MM_JOY1BUTTONDOWN:
-        // Beep(400, 500);
-
 
 
         if ((UINT)wParam & JOY_BUTTON1)
         {
-
+            Beep(200, 500);
+            currentlySelected = stepMania5Selected;
+            RedrawWindow(hWnd, NULL, NULL, RDW_INVALIDATE | RDW_UPDATENOW);
             selectStepMania5(hWnd);
-
-
         }
         else if ((UINT)wParam & JOY_BUTTON2)
         {
             Beep(400, 500);
+            currentlySelected = ddrExtremeSelected;
+            RedrawWindow(hWnd, NULL, NULL, RDW_INVALIDATE | RDW_UPDATENOW);
+            selectDDRextreme(hWnd);
         }
         else if ((UINT)wParam & JOY_BUTTON3)
         {
             Beep(600, 500);
+
+            // clearSelected(hWnd);
+
         }
         else if ((UINT)wParam & JOY_BUTTON4)
         {
             Beep(800, 500);
-
-            /*
-            
-            char stepMania5Selected = 0;
-            char ddrExtremeSelected = 1;
-            char shutdownSelected = 2;
-
-            char currentlySelected = stepMania5Selected;
-            */
-
-
-
-            if (currentlySelected == stepMania5Selected) {
-
-                launchStepMania5(hWnd);
-
-            }
-
-
+            launchSelected(hWnd);
 
         }
 
@@ -353,6 +343,7 @@ LRESULT CALLBACK WndProc(HWND hWnd, UINT message, WPARAM wParam, LPARAM lParam)
         {
 
             clearSelected(hWnd);
+            selectSelected(hWnd);
 
         }
         break;
@@ -419,6 +410,22 @@ void clearSelected(HWND hWnd) {
 
 
 
+
+void selectSelected(HWND hWnd) {
+
+    if (currentlySelected == stepMania5Selected) {
+        selectStepMania5(hWnd);
+    }
+    else if (currentlySelected == ddrExtremeSelected) {
+        selectDDRextreme(hWnd);
+    }
+
+
+}
+
+
+
+
 void selectStepMania5(HWND hWnd) {
 
     HDC hdc = GetDC(hWnd);
@@ -431,6 +438,36 @@ void selectStepMania5(HWND hWnd) {
     DeleteObject(brush);
 
     RedrawWindow(stepMania5Button, NULL, NULL, RDW_INVALIDATE | RDW_UPDATENOW);
+
+}
+
+
+
+
+void selectDDRextreme(HWND hWnd) {
+
+    HDC hdc = GetDC(hWnd);
+
+    RECT rect = { 880, 220, 1240, 580 };
+    HBRUSH brush = CreateSolidBrush(RGB(0, 255, 255));
+
+    FillRect(hdc, &rect, brush);
+
+    DeleteObject(brush);
+
+    RedrawWindow(ddrExtremeButton, NULL, NULL, RDW_INVALIDATE | RDW_UPDATENOW);
+
+}
+
+
+
+void launchSelected(HWND hWnd) {
+
+
+    if (currentlySelected == stepMania5Selected) {
+        launchStepMania5(hWnd);
+    }
+
 
 }
 
