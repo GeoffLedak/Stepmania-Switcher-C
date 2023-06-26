@@ -22,7 +22,11 @@ HWND stepMania5Button;
 HWND ddrExtremeButton;
 HWND shutdownButton;
 
-bool isInit = true;
+char stepMania5Selected = 0;
+char ddrExtremeSelected = 1;
+char shutdownSelected = 2;
+
+char currentlySelected = stepMania5Selected;
 
 
 // Forward declarations of functions included in this code module:
@@ -33,6 +37,8 @@ INT_PTR CALLBACK    About(HWND, UINT, WPARAM, LPARAM);
 
 void clearSelected(HWND);
 void selectStepMania5(HWND);
+
+void launchStepMania5(HWND);
 
 
 int APIENTRY wWinMain(_In_ HINSTANCE hInstance,
@@ -297,24 +303,7 @@ LRESULT CALLBACK WndProc(HWND hWnd, UINT message, WPARAM wParam, LPARAM lParam)
         if ((UINT)wParam & JOY_BUTTON1)
         {
 
-
             selectStepMania5(hWnd);
-
-
-
-/*
-            HDC hdc = GetDC(hWnd);
-
-            RECT rect = { 15, 55, 125, 125 };
-            HBRUSH brush = CreateSolidBrush(RGB(0, 255, 255));
-
-            FillRect(hdc, &rect, brush);
-
-            DeleteObject(brush);
-
-            RedrawWindow(stepMania5Button, NULL, NULL, RDW_INVALIDATE | RDW_UPDATENOW);
-*/
-
 
 
         }
@@ -329,6 +318,26 @@ LRESULT CALLBACK WndProc(HWND hWnd, UINT message, WPARAM wParam, LPARAM lParam)
         else if ((UINT)wParam & JOY_BUTTON4)
         {
             Beep(800, 500);
+
+            /*
+            
+            char stepMania5Selected = 0;
+            char ddrExtremeSelected = 1;
+            char shutdownSelected = 2;
+
+            char currentlySelected = stepMania5Selected;
+            */
+
+
+
+            if (currentlySelected == stepMania5Selected) {
+
+                launchStepMania5(hWnd);
+
+            }
+
+
+
         }
 
 
@@ -343,15 +352,7 @@ LRESULT CALLBACK WndProc(HWND hWnd, UINT message, WPARAM wParam, LPARAM lParam)
     case WM_PAINT:
         {
 
-
-        
-        if (isInit) {
-            isInit = false;
             clearSelected(hWnd);
-        }
-
-
-
 
         }
         break;
@@ -420,9 +421,6 @@ void clearSelected(HWND hWnd) {
 
 void selectStepMania5(HWND hWnd) {
 
-
-
-
     HDC hdc = GetDC(hWnd);
 
     RECT rect = { 260, 220, 620, 580 };
@@ -434,6 +432,50 @@ void selectStepMania5(HWND hWnd) {
 
     RedrawWindow(stepMania5Button, NULL, NULL, RDW_INVALIDATE | RDW_UPDATENOW);
 
+}
 
+
+void launchStepMania5(HWND hWnd) {
+
+    STARTUPINFOW si = { 0 };
+    si.cb = sizeof(si);
+    PROCESS_INFORMATION pi = { 0 };
+
+    // Create the child process
+    BOOL success = CreateProcessW(
+        L"C:\\Games\\StepMania 5\\Program\\StepMania.exe",  // Path to executable
+        NULL,                                   // Command line arguments
+        NULL,                                   // Process attributes
+        NULL,                                   // Thread attributes
+        FALSE,                                  // Inherit handles
+        0,                                      // Creation flags
+        NULL,                                   // Environment
+        NULL,                                   // Working directory
+        &si,                                    // Startup info
+        &pi);                                   // Process information
+
+    if (success)
+    {
+        // Wait for the process to exit
+        WaitForSingleObject(pi.hProcess, INFINITE);
+
+        // Process has exited - check its exit code
+        DWORD exitCode;
+        GetExitCodeProcess(pi.hProcess, &exitCode);
+
+        // At this point exitCode is set to the process' exit code
+
+        // Handles must be closed when they are no longer needed
+        CloseHandle(pi.hThread);
+        CloseHandle(pi.hProcess);
+
+
+
+
+        // RedrawWindow(hWnd, NULL, NULL, RDW_INVALIDATE | RDW_UPDATENOW);
+
+
+
+    }
 
 }
