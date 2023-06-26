@@ -241,10 +241,6 @@ LRESULT CALLBACK WndProc(HWND hWnd, UINT message, WPARAM wParam, LPARAM lParam)
 
             case 1:
             {
-                // Beep(40, 50);
-                // ShellExecute(hWnd, L"open", L"notepad.exe", NULL, NULL, SW_SHOWNORMAL);
-
-
                 STARTUPINFOW si = { 0 };
                 si.cb = sizeof(si);
                 PROCESS_INFORMATION pi = { 0 };
@@ -305,30 +301,24 @@ LRESULT CALLBACK WndProc(HWND hWnd, UINT message, WPARAM wParam, LPARAM lParam)
 
         if ((UINT)wParam & JOY_BUTTON1)
         {
-            Beep(200, 500);
             currentlySelected = stepMania5Selected;
             RedrawWindow(hWnd, NULL, NULL, RDW_INVALIDATE | RDW_UPDATENOW);
             selectStepMania5(hWnd);
         }
         else if ((UINT)wParam & JOY_BUTTON2)
         {
-            Beep(400, 500);
             currentlySelected = ddrExtremeSelected;
             RedrawWindow(hWnd, NULL, NULL, RDW_INVALIDATE | RDW_UPDATENOW);
             selectDDRextreme(hWnd);
         }
         else if ((UINT)wParam & JOY_BUTTON3)
         {
-            Beep(600, 500);
 
-            // clearSelected(hWnd);
 
         }
         else if ((UINT)wParam & JOY_BUTTON4)
         {
-            Beep(800, 500);
             launchSelected(hWnd);
-
         }
 
 
