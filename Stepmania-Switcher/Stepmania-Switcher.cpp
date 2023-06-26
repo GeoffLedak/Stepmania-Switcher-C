@@ -32,6 +32,8 @@ LRESULT CALLBACK    WndProc(HWND, UINT, WPARAM, LPARAM);
 INT_PTR CALLBACK    About(HWND, UINT, WPARAM, LPARAM);
 
 void clearSelected(HWND);
+void selectStepMania5(HWND);
+
 
 int APIENTRY wWinMain(_In_ HINSTANCE hInstance,
                      _In_opt_ HINSTANCE hPrevInstance,
@@ -294,16 +296,13 @@ LRESULT CALLBACK WndProc(HWND hWnd, UINT message, WPARAM wParam, LPARAM lParam)
 
         if ((UINT)wParam & JOY_BUTTON1)
         {
-            // Beep(200, 500);
 
 
-            // ShowWindow(pizza, SW_HIDE);
-
+            selectStepMania5(hWnd);
 
 
 
-            // HDC hdc = CreateDC(TEXT("DISPLAY"), NULL, NULL, NULL);
-
+/*
             HDC hdc = GetDC(hWnd);
 
             RECT rect = { 15, 55, 125, 125 };
@@ -313,9 +312,8 @@ LRESULT CALLBACK WndProc(HWND hWnd, UINT message, WPARAM wParam, LPARAM lParam)
 
             DeleteObject(brush);
 
-            // ShowWindow(pizza, SW_RESTORE);
-
             RedrawWindow(stepMania5Button, NULL, NULL, RDW_INVALIDATE | RDW_UPDATENOW);
+*/
 
 
 
@@ -389,58 +387,53 @@ INT_PTR CALLBACK About(HWND hDlg, UINT message, WPARAM wParam, LPARAM lParam)
 
 
 void clearSelected(HWND hWnd) {
-
     PAINTSTRUCT ps;
     HDC hdc = BeginPaint(hWnd, &ps);
-
 
     HBRUSH brush = CreateSolidBrush(RGB(0, 0, 255));
 
 
-
+    // StepMania 5
     RECT rect = { 260, 220, 620, 580 };
     FillRect(hdc, &rect, brush);
 
 
 
+    // DDR Extreme
     rect = { 880, 220, 1240, 580 };
     FillRect(hdc, &rect, brush);
 
 
 
-
-        // 1330,         // x position
-        // 700,         // y position
-        // 150,        // Button width
-        // 120,        // Button height
-
-
+    // Shut Down
     rect = { 1320, 690, 1490, 830 };
     FillRect(hdc, &rect, brush);
 
 
 
-
-
     EndPaint(hWnd, &ps);
+    // RedrawWindow(hWnd, NULL, NULL, RDW_INVALIDATE | RDW_UPDATENOW);
+}
 
 
 
 
+void selectStepMania5(HWND hWnd) {
 
-/*
+
+
+
     HDC hdc = GetDC(hWnd);
 
-    RECT rect = { 35, 75, 150, 150 };
-    HBRUSH brush = CreateSolidBrush(RGB(255, 255, 255));
+    RECT rect = { 260, 220, 620, 580 };
+    HBRUSH brush = CreateSolidBrush(RGB(0, 255, 255));
 
     FillRect(hdc, &rect, brush);
 
     DeleteObject(brush);
 
-    // ShowWindow(pizza, SW_RESTORE);
+    RedrawWindow(stepMania5Button, NULL, NULL, RDW_INVALIDATE | RDW_UPDATENOW);
 
-    // RedrawWindow(stepMania5Button, NULL, NULL, RDW_INVALIDATE | RDW_UPDATENOW);
-*/
+
 
 }
