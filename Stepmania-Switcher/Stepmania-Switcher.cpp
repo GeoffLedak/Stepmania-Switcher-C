@@ -22,6 +22,8 @@ HWND stepMania5Button;
 HWND ddrExtremeButton;
 HWND shutdownButton;
 
+HWND theMainWindow;
+
 char stepMania5Selected = 0;
 char ddrExtremeSelected = 1;
 char shutdownSelected = 2;
@@ -81,6 +83,45 @@ int APIENTRY wWinMain(_In_ HINSTANCE hInstance,
             TranslateMessage(&msg);
             DispatchMessage(&msg);
         }
+
+
+
+
+        JOYINFO joyinfo;
+
+
+        joyGetPos(0, &joyinfo);
+
+
+
+        if (joyinfo.wButtons == 1)
+        {
+            currentlySelected = stepMania5Selected;
+            RedrawWindow(theMainWindow, NULL, NULL, RDW_INVALIDATE | RDW_UPDATENOW);
+            selectStepMania5(theMainWindow);
+        }
+        else if (joyinfo.wButtons == 2)
+        {
+            currentlySelected = ddrExtremeSelected;
+            RedrawWindow(theMainWindow, NULL, NULL, RDW_INVALIDATE | RDW_UPDATENOW);
+            selectDDRextreme(theMainWindow);
+        }
+        else if (joyinfo.wButtons == 4)
+        {
+            currentlySelected = shutdownSelected;
+            RedrawWindow(theMainWindow, NULL, NULL, RDW_INVALIDATE | RDW_UPDATENOW);
+            selectShutdown(theMainWindow);
+        }
+        else if (joyinfo.wButtons == 8)
+        {
+            launchSelected(theMainWindow);
+        }
+
+
+
+
+
+
     }
 
     return (int) msg.wParam;
@@ -134,12 +175,14 @@ BOOL InitInstance(HINSTANCE hInstance, int nCmdShow)
    HWND hWnd = CreateWindowW(szWindowClass, szTitle, WS_OVERLAPPEDWINDOW,
       CW_USEDEFAULT, 0, CW_USEDEFAULT, 0, nullptr, nullptr, hInstance, nullptr);
 
+   theMainWindow = hWnd;
+
    // SetWindowLong(hWnd, GWL_STYLE, WS_BORDER);  // With 1 point border
-   SetWindowLong(hWnd, GWL_STYLE, 0);
+   // SetWindowLong(hWnd, GWL_STYLE, 0);
 
    // 2560 x 1600
 
-   SetWindowPos(hWnd, 0, 0, 0, GetSystemMetrics(SM_CXSCREEN), GetSystemMetrics(SM_CYSCREEN), 0);
+   // SetWindowPos(hWnd, 0, 0, 0, GetSystemMetrics(SM_CXSCREEN), GetSystemMetrics(SM_CYSCREEN), 0);
 
    if (!hWnd)
    {
@@ -325,6 +368,11 @@ LRESULT CALLBACK WndProc(HWND hWnd, UINT message, WPARAM wParam, LPARAM lParam)
     case MM_JOY1BUTTONDOWN:
 
 
+
+
+
+/*
+
         if ((UINT)wParam & JOY_BUTTON1)
         {
             currentlySelected = stepMania5Selected;
@@ -347,6 +395,9 @@ LRESULT CALLBACK WndProc(HWND hWnd, UINT message, WPARAM wParam, LPARAM lParam)
         {
             launchSelected(hWnd);
         }
+
+
+*/
 
 
         break;
