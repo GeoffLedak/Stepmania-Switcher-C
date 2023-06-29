@@ -21,6 +21,7 @@ WCHAR szWindowClass[MAX_LOADSTRING];            // the main window class name
 HWND stepMania5Button;
 HWND ddrExtremeButton;
 HWND shutdownButton;
+HWND exitButton;
 
 HWND theMainWindow;
 
@@ -106,12 +107,27 @@ int APIENTRY wWinMain(_In_ HINSTANCE hInstance,
             RedrawWindow(theMainWindow, NULL, NULL, RDW_INVALIDATE | RDW_UPDATENOW);
             selectDDRextreme(theMainWindow);
         }
+
+
+
+        // Exit
+
+
+
+
+        // Shut down
         else if (joyinfo.wButtons == 4)
         {
             currentlySelected = shutdownSelected;
             RedrawWindow(theMainWindow, NULL, NULL, RDW_INVALIDATE | RDW_UPDATENOW);
             selectShutdown(theMainWindow);
         }
+
+
+
+
+
+
         else if (joyinfo.wButtons == 8)
         {
             launchSelected(theMainWindow);
@@ -256,21 +272,49 @@ LRESULT CALLBACK WndProc(HWND hWnd, UINT message, WPARAM wParam, LPARAM lParam)
 
 
 
+        HBITMAP shutdownImage = (HBITMAP)LoadImage(NULL, L"shutdown-icon-smaller.bmp", IMAGE_BITMAP, 0, 0, LR_LOADFROMFILE);
 
-
-        shutdownButton = CreateWindowExA(
-            HTMAXBUTTON,
-            "BUTTON",  // Predefined class; Unicode assumed
-            "Shut down",      // Button text
-            WS_TABSTOP | WS_VISIBLE | WS_CHILD | BS_DEFPUSHBUTTON,  // Styles
-            1330,         // x position
-            700,         // y position
-            150,        // Button width
-            120,        // Button height
-            hWnd,     // Parent window
-            (HMENU)3,
+        shutdownButton = CreateWindowEx(
             NULL,
-            NULL);      // Pointer not needed.
+            L"STATIC",
+            NULL,
+            SS_BITMAP | WS_VISIBLE | WS_CHILD,
+            1330,    // x position
+            718,    // y position
+            150,    // Button width
+            120,    // Button height
+            hWnd,
+            (HMENU)3,
+            GetModuleHandle(NULL),
+            NULL);
+
+        SendMessage(shutdownButton, STM_SETIMAGE, IMAGE_BITMAP, (LPARAM)shutdownImage);
+
+
+
+
+
+
+        HBITMAP exitImage = (HBITMAP)LoadImage(NULL, L"exit-icon-smaller.bmp", IMAGE_BITMAP, 0, 0, LR_LOADFROMFILE);
+
+        exitButton = CreateWindowEx(
+            NULL,
+            L"STATIC",
+            NULL,
+            SS_BITMAP | WS_VISIBLE | WS_CHILD,
+            20,    // x position
+            718,    // y position
+            150,    // Button width
+            120,    // Button height
+            hWnd,
+            (HMENU)3,
+            GetModuleHandle(NULL),
+            NULL);
+
+        SendMessage(exitButton, STM_SETIMAGE, IMAGE_BITMAP, (LPARAM)exitImage);
+
+
+
 
 
 
@@ -463,7 +507,7 @@ void clearSelected(HWND hWnd) {
 
 
     // Shut Down
-    rect = { 1320, 690, 1490, 830 };
+    rect = { 1320, 708, 1490, 848 };
     FillRect(hdc, &rect, brush);
 
 
@@ -534,7 +578,7 @@ void selectShutdown(HWND hWnd) {
 
     HDC hdc = GetDC(hWnd);
 
-    RECT rect = { 1320, 690, 1490, 830 };
+    RECT rect = { 1320, 708, 1490, 848 };
     HBRUSH brush = CreateSolidBrush(RGB(0, 255, 0));
 
     FillRect(hdc, &rect, brush);
