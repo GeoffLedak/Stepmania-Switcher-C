@@ -1,3 +1,4 @@
 ﻿  Stepmania-Switcher.cpp
-C:\Users\Turbo9000\source\repos\Stepmania-Switcher\Stepmania-Switcher\Stepmania-Switcher.cpp(201,24): warning C4267: 'initializing': conversion from 'size_t' to 'int', possible loss of data
+C:\Users\Turbo9000\source\repos\Stepmania-Switcher\Stepmania-Switcher\Stepmania-Switcher.cpp(206,24): warning C4267: 'initializing': conversion from 'size_t' to 'int', possible loss of data
+C:\Users\Turbo9000\source\repos\Stepmania-Switcher\Stepmania-Switcher\Stepmania-Switcher.cpp(265,16): warning C4267: 'initializing': conversion from 'size_t' to 'int', possible loss of data
   Stepmania-Switcher.vcxproj -> C:\Users\Turbo9000\source\repos\Stepmania-Switcher\x64\Debug\Stepmania-Switcher.exe

@@ -45,6 +45,8 @@ unsigned int backButton = 4;
 
 char enableConfigMode = 0;
 
+char hasLoadedConfig = 0;
+
 
 // Forward declarations of functions included in this code module:
 ATOM                MyRegisterClass(HINSTANCE hInstance);
@@ -68,6 +70,7 @@ void exitDaProgram(HWND);
 
 void handleJoystickInput();
 void startConfig();
+void loadConfig();
 
 
 int APIENTRY wWinMain(_In_ HINSTANCE hInstance,
@@ -104,6 +107,8 @@ int APIENTRY wWinMain(_In_ HINSTANCE hInstance,
             DispatchMessage(&msg);
         }
 
+        if (!hasLoadedConfig)
+            loadConfig();
 
         if (enableConfigMode)
             startConfig();
@@ -241,10 +246,6 @@ void startConfig() {
 
             // ======================
 
-
-            // Then fetch the values with GetPrivateProfileInt and GetPrivateProfileString
-
-
         }
     }
 
@@ -253,9 +254,48 @@ void startConfig() {
 
 
 
+
+void loadConfig() {
+
+    char buffer[MAX_PATH];
+    char* poo;
+
+    GetModuleFileNameA(NULL, buffer, MAX_PATH);
+
+    int length = strlen(buffer);
+    poo = buffer;
+    poo = poo + length;
+
+    while (length >= 0) {
+
+        if (*poo == '\\') {
+            poo++;
+            *poo = '\0';
+            break;
+        }
+
+        length--;
+        poo--;
+    }
+
+    strcat_s(buffer, "config.ini");
+
+
+    joyPosition = GetPrivateProfileIntA("Stepmania-Switcher", "joyPosition", 9999, buffer);
+    leftButton = GetPrivateProfileIntA("Stepmania-Switcher", "leftButton", 9998, buffer);
+    rightButton = GetPrivateProfileIntA("Stepmania-Switcher", "rightButton", 9997, buffer);
+    selectButton = GetPrivateProfileIntA("Stepmania-Switcher", "selectButton", 9996, buffer);
+    backButton = GetPrivateProfileIntA("Stepmania-Switcher", "backButton", 9995, buffer);
+
+
+    hasLoadedConfig = 1;
+}
+
+
+
+
+
 void handleJoystickInput() {
-
-
 
     JOYINFO joyinfo;
     joyGetPos(joyPosition, &joyinfo);
