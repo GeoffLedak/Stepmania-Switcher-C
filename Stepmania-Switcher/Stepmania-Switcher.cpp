@@ -28,8 +28,17 @@ HWND theMainWindow;
 char stepMania5Selected = 0;
 char ddrExtremeSelected = 1;
 char shutdownSelected = 2;
+char exitSelected = 3;
 
 char currentlySelected = stepMania5Selected;
+
+unsigned int joyPosition = 0;
+unsigned int buttonState = 0;
+
+unsigned int leftButton = 1;
+unsigned int rightButton = 2;
+unsigned int selectButton = 8;
+unsigned int backButton = 4;
 
 
 // Forward declarations of functions included in this code module:
@@ -44,11 +53,13 @@ void selectSelected(HWND);
 void selectStepMania5(HWND);
 void selectDDRextreme(HWND);
 void selectShutdown(HWND);
+void selectExit(HWND);
 
 void launchSelected(HWND);
 void launchStepMania5(HWND);
 void launchDDRextreme(HWND);
 void shutdownDaComputah(HWND);
+void exitDaProgram(HWND);
 
 
 int APIENTRY wWinMain(_In_ HINSTANCE hInstance,
@@ -86,22 +97,24 @@ int APIENTRY wWinMain(_In_ HINSTANCE hInstance,
         }
 
 
-
-
         JOYINFO joyinfo;
+        joyGetPos(joyPosition, &joyinfo);
 
 
-        joyGetPos(0, &joyinfo);
+        if (joyinfo.wButtons == buttonState)
+            continue;
 
 
+        buttonState = joyinfo.wButtons;
 
-        if (joyinfo.wButtons == 1)
+
+        if (buttonState == leftButton)
         {
             currentlySelected = stepMania5Selected;
             RedrawWindow(theMainWindow, NULL, NULL, RDW_INVALIDATE | RDW_UPDATENOW);
             selectStepMania5(theMainWindow);
         }
-        else if (joyinfo.wButtons == 2)
+        else if (buttonState == rightButton)
         {
             currentlySelected = ddrExtremeSelected;
             RedrawWindow(theMainWindow, NULL, NULL, RDW_INVALIDATE | RDW_UPDATENOW);
@@ -111,12 +124,18 @@ int APIENTRY wWinMain(_In_ HINSTANCE hInstance,
 
 
         // Exit
+        else if (buttonState == (backButton + leftButton))
+        {
+            currentlySelected = exitSelected;
+            RedrawWindow(theMainWindow, NULL, NULL, RDW_INVALIDATE | RDW_UPDATENOW);
+            selectExit(theMainWindow);
+        }
 
 
 
 
         // Shut down
-        else if (joyinfo.wButtons == 4)
+        else if (buttonState == (backButton + rightButton))
         {
             currentlySelected = shutdownSelected;
             RedrawWindow(theMainWindow, NULL, NULL, RDW_INVALIDATE | RDW_UPDATENOW);
@@ -126,14 +145,10 @@ int APIENTRY wWinMain(_In_ HINSTANCE hInstance,
 
 
 
-
-
-        else if (joyinfo.wButtons == 8)
+        else if (buttonState == selectButton)
         {
             launchSelected(theMainWindow);
         }
-
-
 
 
 
@@ -316,14 +331,9 @@ LRESULT CALLBACK WndProc(HWND hWnd, UINT message, WPARAM wParam, LPARAM lParam)
 
 
 
-
-
-
-
         SetMenu(hWnd, NULL);
 
         ShowCursor(false);
-
 
 
 
@@ -334,9 +344,6 @@ LRESULT CALLBACK WndProc(HWND hWnd, UINT message, WPARAM wParam, LPARAM lParam)
                 MB_OK | MB_ICONEXCLAMATION);
             PostMessage(hWnd, WM_CLOSE, 0, 0L);
         }
-
-
-
 
 
         break;
@@ -350,100 +357,18 @@ LRESULT CALLBACK WndProc(HWND hWnd, UINT message, WPARAM wParam, LPARAM lParam)
             // Parse the menu selections:
             switch (wmId)
             {
+                case IDM_ABOUT:
+                    DialogBox(hInst, MAKEINTRESOURCE(IDD_ABOUTBOX), hWnd, About);
+                    break;
 
+                case IDM_EXIT:
+                    DestroyWindow(hWnd);
+                    break;
 
-            case 1:
-            {
-                STARTUPINFOW si = { 0 };
-                si.cb = sizeof(si);
-                PROCESS_INFORMATION pi = { 0 };
-
-                // Create the child process
-                BOOL success = CreateProcessW(
-                    L"C:\\Windows\\system32\\notepad.exe",  // Path to executable
-                    NULL,                                   // Command line arguments
-                    NULL,                                   // Process attributes
-                    NULL,                                   // Thread attributes
-                    FALSE,                                  // Inherit handles
-                    0,                                      // Creation flags
-                    NULL,                                   // Environment
-                    NULL,                                   // Working directory
-                    &si,                                    // Startup info
-                    &pi);                                   // Process information
-
-                if (success)
-                {
-                    // Wait for the process to exit
-                    WaitForSingleObject(pi.hProcess, INFINITE);
-
-                    // Process has exited - check its exit code
-                    DWORD exitCode;
-                    GetExitCodeProcess(pi.hProcess, &exitCode);
-
-                    // At this point exitCode is set to the process' exit code
-
-                    // Handles must be closed when they are no longer needed
-                    CloseHandle(pi.hThread);
-                    CloseHandle(pi.hProcess);
-                }
-
-
-                break;
-            }
-            case IDM_ABOUT:
-                DialogBox(hInst, MAKEINTRESOURCE(IDD_ABOUTBOX), hWnd, About);
-                break;
-            case IDM_EXIT:
-                DestroyWindow(hWnd);
-                break;
-
-
-            default:
-                return DefWindowProc(hWnd, message, wParam, lParam);
+                default:
+                    return DefWindowProc(hWnd, message, wParam, lParam);
             }
         }
-        break;
-
-
-
-
-
-
-    case MM_JOY1BUTTONDOWN:
-
-
-
-
-
-/*
-
-        if ((UINT)wParam & JOY_BUTTON1)
-        {
-            currentlySelected = stepMania5Selected;
-            RedrawWindow(hWnd, NULL, NULL, RDW_INVALIDATE | RDW_UPDATENOW);
-            selectStepMania5(hWnd);
-        }
-        else if ((UINT)wParam & JOY_BUTTON2)
-        {
-            currentlySelected = ddrExtremeSelected;
-            RedrawWindow(hWnd, NULL, NULL, RDW_INVALIDATE | RDW_UPDATENOW);
-            selectDDRextreme(hWnd);
-        }
-        else if ((UINT)wParam & JOY_BUTTON3)
-        {
-            currentlySelected = shutdownSelected;
-            RedrawWindow(hWnd, NULL, NULL, RDW_INVALIDATE | RDW_UPDATENOW);
-            selectShutdown(hWnd);
-        }
-        else if ((UINT)wParam & JOY_BUTTON4)
-        {
-            launchSelected(hWnd);
-        }
-
-
-*/
-
-
         break;
 
 
@@ -511,6 +436,11 @@ void clearSelected(HWND hWnd) {
     FillRect(hdc, &rect, brush);
 
 
+    // Exit
+    rect = { 10, 708, 180, 848 };
+    FillRect(hdc, &rect, brush);
+
+
 
     EndPaint(hWnd, &ps);
     // RedrawWindow(hWnd, NULL, NULL, RDW_INVALIDATE | RDW_UPDATENOW);
@@ -531,7 +461,9 @@ void selectSelected(HWND hWnd) {
     else if (currentlySelected == shutdownSelected) {
         selectShutdown(hWnd);
     }
-
+    else if (currentlySelected == exitSelected) {
+        selectExit(hWnd);
+    }
 
 }
 
@@ -575,7 +507,6 @@ void selectDDRextreme(HWND hWnd) {
 
 void selectShutdown(HWND hWnd) {
 
-
     HDC hdc = GetDC(hWnd);
 
     RECT rect = { 1320, 708, 1490, 848 };
@@ -586,8 +517,22 @@ void selectShutdown(HWND hWnd) {
     DeleteObject(brush);
 
     RedrawWindow(shutdownButton, NULL, NULL, RDW_INVALIDATE | RDW_UPDATENOW);
+}
 
 
+
+void selectExit(HWND hWnd) {
+
+    HDC hdc = GetDC(hWnd);
+
+    RECT rect = { 10, 708, 180, 848 };
+    HBRUSH brush = CreateSolidBrush(RGB(0, 255, 0));
+
+    FillRect(hdc, &rect, brush);
+
+    DeleteObject(brush);
+
+    RedrawWindow(exitButton, NULL, NULL, RDW_INVALIDATE | RDW_UPDATENOW);
 }
 
 
@@ -604,6 +549,9 @@ void launchSelected(HWND hWnd) {
     }
     else if (currentlySelected == shutdownSelected) {
         shutdownDaComputah(hWnd);
+    }
+    else if (currentlySelected == exitSelected) {
+        exitDaProgram(hWnd);
     }
 
 
@@ -704,7 +652,10 @@ void launchDDRextreme(HWND hWnd) {
 
 
 void shutdownDaComputah(HWND hWnd) {
-
     DestroyWindow(hWnd);
+}
 
+
+void exitDaProgram(HWND hWnd) {
+    DestroyWindow(hWnd);
 }
