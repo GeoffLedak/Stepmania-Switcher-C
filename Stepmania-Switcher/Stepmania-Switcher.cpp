@@ -139,13 +139,13 @@ void startConfig() {
     while (!hasDoneAllButtons) {
 
 
-
         // just checking 4 gamepads for now
-        for (i = 0; i < 3; i++) {
+        for (i = 0; i < 4; i++) {
 
-            joyGetPos(joyPosition, &joyinfo);
+            joyGetPos(i, &joyinfo);
 
             if (!hasDoneLeft && (joyinfo.wButtons != configButtonState) && joyinfo.wButtons != 0) {
+                joyPosition = i;    // expect all of the following buttons to come from the same joystick
                 leftButton = joyinfo.wButtons;
                 configButtonState = joyinfo.wButtons;
                 hasDoneLeft = 1;
@@ -157,10 +157,22 @@ void startConfig() {
                 hasDoneRight = 1;
             }
 
+            else if (!hasDoneSelect && (joyinfo.wButtons != configButtonState) && joyinfo.wButtons != 0) {
+                selectButton = joyinfo.wButtons;
+                configButtonState = joyinfo.wButtons;
+                hasDoneSelect = 1;
+            }
+
+            else if (!hasDoneBack && (joyinfo.wButtons != configButtonState) && joyinfo.wButtons != 0) {
+                backButton = joyinfo.wButtons;
+                configButtonState = joyinfo.wButtons;
+                hasDoneBack = 1;
+            }
+
         }
 
 
-        if (hasDoneLeft && hasDoneRight) {
+        if (hasDoneLeft && hasDoneRight && hasDoneSelect && hasDoneBack) {
             enableConfigMode = 0;
             hasDoneAllButtons = 1;
         }
