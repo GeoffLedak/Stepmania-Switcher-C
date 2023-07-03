@@ -23,6 +23,8 @@ HWND ddrExtremeButton;
 HWND shutdownButton;
 HWND exitButton;
 
+HWND configButton;
+
 HWND theMainWindow;
 
 char stepMania5Selected = 0;
@@ -122,6 +124,7 @@ int APIENTRY wWinMain(_In_ HINSTANCE hInstance,
 void startConfig() {
 
 
+
     int i = 0;
 
     unsigned int configButtonState = 0;
@@ -134,6 +137,10 @@ void startConfig() {
     char hasDoneBack = 0;
 
     JOYINFO joyinfo;
+
+    ShowWindow(configButton, SW_SHOW);
+    RedrawWindow(configButton, NULL, NULL, RDW_INVALIDATE | RDW_UPDATENOW);
+    SendMessage(configButton, WM_SETTEXT, 0, (LPARAM)_T("Press Left"));
 
 
     while (!hasDoneAllButtons) {
@@ -149,24 +156,28 @@ void startConfig() {
                 leftButton = joyinfo.wButtons;
                 configButtonState = joyinfo.wButtons;
                 hasDoneLeft = 1;
+                SendMessage(configButton, WM_SETTEXT, 0, (LPARAM)_T("Press Right"));
             }
 
             else if (!hasDoneRight && (joyinfo.wButtons != configButtonState) && joyinfo.wButtons != 0) {
                 rightButton = joyinfo.wButtons;
                 configButtonState = joyinfo.wButtons;
                 hasDoneRight = 1;
+                SendMessage(configButton, WM_SETTEXT, 0, (LPARAM)_T("Press Select"));
             }
 
             else if (!hasDoneSelect && (joyinfo.wButtons != configButtonState) && joyinfo.wButtons != 0) {
                 selectButton = joyinfo.wButtons;
                 configButtonState = joyinfo.wButtons;
                 hasDoneSelect = 1;
+                SendMessage(configButton, WM_SETTEXT, 0, (LPARAM)_T("Press Back"));
             }
 
             else if (!hasDoneBack && (joyinfo.wButtons != configButtonState) && joyinfo.wButtons != 0) {
                 backButton = joyinfo.wButtons;
                 configButtonState = joyinfo.wButtons;
                 hasDoneBack = 1;
+                SendMessage(configButton, WM_SETTEXT, 0, (LPARAM)_T("DONE"));
             }
 
         }
@@ -175,6 +186,7 @@ void startConfig() {
         if (hasDoneLeft && hasDoneRight && hasDoneSelect && hasDoneBack) {
             enableConfigMode = 0;
             hasDoneAllButtons = 1;
+            ShowWindow(configButton, SW_HIDE);
         }
     }
 
@@ -414,6 +426,25 @@ LRESULT CALLBACK WndProc(HWND hWnd, UINT message, WPARAM wParam, LPARAM lParam)
 
         SendMessage(exitButton, STM_SETIMAGE, IMAGE_BITMAP, (LPARAM)exitImage);
 
+
+
+
+        configButton = CreateWindowExA(
+            HTMAXBUTTON,
+            "BUTTON",  // Predefined class; Unicode assumed
+            "Pizza",      // Button text
+            WS_TABSTOP | WS_VISIBLE | WS_CHILD | BS_DEFPUSHBUTTON,  // Styles
+            10,         // x position
+            10,         // y position
+            100,        // Button width
+            100,        // Button height
+            hWnd,     // Parent window
+            (HMENU)1,
+            NULL,
+            NULL);      // Pointer not needed.
+
+
+        ShowWindow(configButton, SW_HIDE);
 
 
 
