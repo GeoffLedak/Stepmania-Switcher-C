@@ -40,6 +40,8 @@ unsigned int rightButton = 2;
 unsigned int selectButton = 8;
 unsigned int backButton = 4;
 
+char enableConfigMode = 0;
+
 
 // Forward declarations of functions included in this code module:
 ATOM                MyRegisterClass(HINSTANCE hInstance);
@@ -60,6 +62,9 @@ void launchStepMania5(HWND);
 void launchDDRextreme(HWND);
 void shutdownDaComputah(HWND);
 void exitDaProgram(HWND);
+
+void handleJoystickInput();
+void startConfig();
 
 
 int APIENTRY wWinMain(_In_ HINSTANCE hInstance,
@@ -97,58 +102,11 @@ int APIENTRY wWinMain(_In_ HINSTANCE hInstance,
         }
 
 
-        JOYINFO joyinfo;
-        joyGetPos(joyPosition, &joyinfo);
+        if (enableConfigMode)
+            startConfig();
+        else
+            handleJoystickInput();
 
-
-        if (joyinfo.wButtons == buttonState)
-            continue;
-
-
-        buttonState = joyinfo.wButtons;
-
-
-        if (buttonState == leftButton)
-        {
-            currentlySelected = stepMania5Selected;
-            RedrawWindow(theMainWindow, NULL, NULL, RDW_INVALIDATE | RDW_UPDATENOW);
-            selectStepMania5(theMainWindow);
-        }
-        else if (buttonState == rightButton)
-        {
-            currentlySelected = ddrExtremeSelected;
-            RedrawWindow(theMainWindow, NULL, NULL, RDW_INVALIDATE | RDW_UPDATENOW);
-            selectDDRextreme(theMainWindow);
-        }
-
-
-
-        // Exit
-        else if (buttonState == (backButton + leftButton))
-        {
-            currentlySelected = exitSelected;
-            RedrawWindow(theMainWindow, NULL, NULL, RDW_INVALIDATE | RDW_UPDATENOW);
-            selectExit(theMainWindow);
-        }
-
-
-
-
-        // Shut down
-        else if (buttonState == (backButton + rightButton))
-        {
-            currentlySelected = shutdownSelected;
-            RedrawWindow(theMainWindow, NULL, NULL, RDW_INVALIDATE | RDW_UPDATENOW);
-            selectShutdown(theMainWindow);
-        }
-
-
-
-
-        else if (buttonState == selectButton)
-        {
-            launchSelected(theMainWindow);
-        }
 
 
 
@@ -156,6 +114,122 @@ int APIENTRY wWinMain(_In_ HINSTANCE hInstance,
     }
 
     return (int) msg.wParam;
+}
+
+
+
+
+void startConfig() {
+
+
+    int i = 0;
+
+    unsigned int configButtonState = 0;
+
+    char hasDoneAllButtons = 0;
+
+    char hasDoneLeft = 0;
+    char hasDoneRight = 0;
+    char hasDoneSelect = 0;
+    char hasDoneBack = 0;
+
+    JOYINFO joyinfo;
+
+
+    while (!hasDoneAllButtons) {
+
+
+
+        // just checking 4 gamepads for now
+        for (i = 0; i < 3; i++) {
+
+            joyGetPos(joyPosition, &joyinfo);
+
+            if (!hasDoneLeft && (joyinfo.wButtons != configButtonState) && joyinfo.wButtons != 0) {
+                leftButton = joyinfo.wButtons;
+                configButtonState = joyinfo.wButtons;
+                hasDoneLeft = 1;
+            }
+
+            else if (!hasDoneRight && (joyinfo.wButtons != configButtonState) && joyinfo.wButtons != 0) {
+                rightButton = joyinfo.wButtons;
+                configButtonState = joyinfo.wButtons;
+                hasDoneRight = 1;
+            }
+
+        }
+
+
+        if (hasDoneLeft && hasDoneRight) {
+            enableConfigMode = 0;
+            hasDoneAllButtons = 1;
+        }
+    }
+
+
+}
+
+
+
+void handleJoystickInput() {
+
+
+
+    JOYINFO joyinfo;
+    joyGetPos(joyPosition, &joyinfo);
+
+
+    if (joyinfo.wButtons == buttonState)
+        return;
+
+
+    buttonState = joyinfo.wButtons;
+
+
+    if (buttonState == leftButton)
+    {
+        currentlySelected = stepMania5Selected;
+        RedrawWindow(theMainWindow, NULL, NULL, RDW_INVALIDATE | RDW_UPDATENOW);
+        selectStepMania5(theMainWindow);
+    }
+    else if (buttonState == rightButton)
+    {
+        currentlySelected = ddrExtremeSelected;
+        RedrawWindow(theMainWindow, NULL, NULL, RDW_INVALIDATE | RDW_UPDATENOW);
+        selectDDRextreme(theMainWindow);
+    }
+
+
+
+    // Exit
+    else if (buttonState == (backButton + leftButton))
+    {
+        currentlySelected = exitSelected;
+        RedrawWindow(theMainWindow, NULL, NULL, RDW_INVALIDATE | RDW_UPDATENOW);
+        selectExit(theMainWindow);
+    }
+
+
+
+
+    // Shut down
+    else if (buttonState == (backButton + rightButton))
+    {
+        currentlySelected = shutdownSelected;
+        RedrawWindow(theMainWindow, NULL, NULL, RDW_INVALIDATE | RDW_UPDATENOW);
+        selectShutdown(theMainWindow);
+    }
+
+
+
+
+    else if (buttonState == selectButton)
+    {
+        launchSelected(theMainWindow);
+    }
+
+
+
 }
 
 
@@ -348,6 +422,38 @@ LRESULT CALLBACK WndProc(HWND hWnd, UINT message, WPARAM wParam, LPARAM lParam)
 
         break;
     }
+
+
+
+
+
+
+
+
+
+
+
+
+
+    case WM_KEYUP:
+
+        if (wParam == 0x43) {
+            enableConfigMode = 1;
+        }
+
+        break;
+
+
+
+
+
+
+
+
+
+
+
+
 
 
 
