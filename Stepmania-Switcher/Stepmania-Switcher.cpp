@@ -2,6 +2,7 @@
 //
 
 #include <windows.h>
+#include <stdio.h>
 #include <ShellAPI.h>
 
 #pragma comment(lib, "winmm.lib")
@@ -214,7 +215,29 @@ void startConfig() {
             }
 
             strcat_s(buffer, "config.ini");
-            WritePrivateProfileStringA("YourProgramName", "keyname", "value222", buffer);
+
+            char paramAsString[128];
+
+            // joyPosition
+            sprintf_s(paramAsString, "%d", joyPosition);
+            WritePrivateProfileStringA("Stepmania-Switcher", "joyPosition", paramAsString, buffer);
+
+            // leftButton
+            sprintf_s(paramAsString, "%d", leftButton);
+            WritePrivateProfileStringA("Stepmania-Switcher", "leftButton", paramAsString, buffer);
+
+            // rightButton
+            sprintf_s(paramAsString, "%d", rightButton);
+            WritePrivateProfileStringA("Stepmania-Switcher", "rightButton", paramAsString, buffer);
+
+            // selectButton
+            sprintf_s(paramAsString, "%d", selectButton);
+            WritePrivateProfileStringA("Stepmania-Switcher", "selectButton", paramAsString, buffer);
+
+            // backButton
+            sprintf_s(paramAsString, "%d", backButton);
+            WritePrivateProfileStringA("Stepmania-Switcher", "backButton", paramAsString, buffer);
+
 
             // ======================
 
