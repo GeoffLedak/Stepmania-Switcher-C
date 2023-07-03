@@ -187,6 +187,41 @@ void startConfig() {
             enableConfigMode = 0;
             hasDoneAllButtons = 1;
             ShowWindow(configButton, SW_HIDE);
+
+
+
+            // ===== Save Config =====
+
+            char buffer[MAX_PATH];
+            char* poo;
+
+            GetModuleFileNameA(NULL, buffer, MAX_PATH);
+
+            int length = strlen(buffer);
+            poo = buffer;
+            poo = poo + length;
+
+            while (length >= 0) {
+
+                if (*poo == '\\') {
+                    poo++;
+                    *poo = '\0';
+                    break;
+                }
+
+                length--;
+                poo--;
+            }
+
+            strcat_s(buffer, "config.ini");
+            WritePrivateProfileStringA("YourProgramName", "keyname", "value222", buffer);
+
+            // ======================
+
+
+            // Then fetch the values with GetPrivateProfileInt and GetPrivateProfileString
+
+
         }
     }
 
