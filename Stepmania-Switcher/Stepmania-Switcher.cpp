@@ -50,6 +50,9 @@ char enableConfigMode = 0;
 
 char hasLoadedConfig = 0;
 
+char* stepManiaPath = new char[256];
+char* ddrExtremePath = new char[256];
+
 
 // Forward declarations of functions included in this code module:
 ATOM                MyRegisterClass(HINSTANCE hInstance);
@@ -289,6 +292,10 @@ void loadConfig() {
     rightButton = GetPrivateProfileIntA("Stepmania-Switcher", "rightButton", 9997, buffer);
     selectButton = GetPrivateProfileIntA("Stepmania-Switcher", "selectButton", 9996, buffer);
     backButton = GetPrivateProfileIntA("Stepmania-Switcher", "backButton", 9995, buffer);
+
+
+    GetPrivateProfileStringA("Stepmania-Switcher", "stepManiaPath", "poop", stepManiaPath, 256, buffer);
+    GetPrivateProfileStringA("Stepmania-Switcher", "ddrExtremePath", "poop", ddrExtremePath, 256, buffer);
 
 
     hasLoadedConfig = 1;
@@ -814,9 +821,14 @@ void launchStepMania5(HWND hWnd) {
     si.cb = sizeof(si);
     PROCESS_INFORMATION pi = { 0 };
 
+
+    wchar_t* wString = new wchar_t[256];
+    MultiByteToWideChar(CP_ACP, 0, stepManiaPath, -1, wString, 256);
+
+
     // Create the child process
     BOOL success = CreateProcessW(
-        L"C:\\Games\\StepMania 5\\Program\\StepMania.exe",  // Path to executable
+        wString,  // Path to executable
         NULL,                                   // Command line arguments
         NULL,                                   // Process attributes
         NULL,                                   // Thread attributes
@@ -860,9 +872,14 @@ void launchDDRextreme(HWND hWnd) {
     si.cb = sizeof(si);
     PROCESS_INFORMATION pi = { 0 };
 
+
+    wchar_t* wString = new wchar_t[256];
+    MultiByteToWideChar(CP_ACP, 0, ddrExtremePath, -1, wString, 256);
+
+
     // Create the child process
     BOOL success = CreateProcessW(
-        L"C:\\Program Files (x86)\\StepMania\\Program\\StepMania.exe",  // Path to executable
+        wString,  // Path to executable
         NULL,                                   // Command line arguments
         NULL,                                   // Process attributes
         NULL,                                   // Thread attributes
